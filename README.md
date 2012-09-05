@@ -1,0 +1,2 @@
+# drSlider - jQuery Slider Plugin
+=================================
