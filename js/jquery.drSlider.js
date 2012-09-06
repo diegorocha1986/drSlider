@@ -63,13 +63,13 @@
 						links[i].innerHTML 	= 'Navegação';
 						links[i].className 	= 'bt-nav ir';
 
-						$(links[i]).bind('click.drslider',function(){
-							_private.movement.handlerButtonNav.call(this);
-						});
-
 						data.controls.push(links[i]);
 						container.appendChild(links[i]);
 					};
+
+					$(links).bind('click.drslider',function(){
+						_private.movement.handlerButtonNav.call(this);
+					});
 
 					$.data($(this)[0], 'drSlider', data);
 
@@ -84,8 +84,7 @@
 						index 		= $(this).index(),
 						position 	= ((data.listItemsOpts.width*index)*-1);
 
-					$(this).siblings().removeClass('current');
-					$(this).addClass('current');
+					$(this).addClass('current').siblings().removeClass('current');
 
 					_private.movement.animate.call($slider, position);
 				},
@@ -107,19 +106,21 @@
 						dataset	= function(attr, casting) {
 							var ret = this.attr("data-drslider-" + attr);
 
-							if (typeof ret === "undefined") return undefined;
-							if (casting === "bool") 		return ((ret + "").toLowerCase() === "false") ? false : true;
-							if (casting === "int") 			return window.parseInt(ret, 10);
-							if (casting === "float") 		return window.parseFloat(ret);
+							if (typeof ret 	=== "undefined") 	return undefined;
+							if (casting 	=== "bool") 		return ((ret + "").toLowerCase() === "false") ? false : true;
+							if (casting 	=== "int") 			return window.parseInt(ret, 10);
+							if (casting 	=== "float") 		return window.parseFloat(ret);
+							if (casting 	=== "string") 		return ret.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 							
 							return ret;
-						}
+						},
 						settings 	= {
-							loop 		: dataset.call($this, 'loop', 'bool') 		=== true	?  true : false,
-							shownav 	: dataset.call($this, 'shownav', 'bool') 	=== true	?  true : false,
+							loop 		: dataset.call($this, 'loop', 'bool') 		=== true	 ? true : false,
+							shownav 	: dataset.call($this, 'shownav', 'bool') 	=== true	 ? true : false,
 							visible 	: dataset.call($this, 'visible', 'int') 				|| 4,
-							walk 		: dataset.call($this, 'walk', 'int')	 				|| 3
-						}
+							walk 		: dataset.call($this, 'walk', 'int')	 				|| 3,
+							easing 		: dataset.call($this, 'easing', 'string')				|| 'easeOutExpo'
+						};
 
 					options && $.extend(settings, options);
 
@@ -148,6 +149,8 @@
 
 					data.$slider.removeAttr('style');
 					data.$overflow.remove();
+
+					$(data.controls).unbind('.drslider').remove();
 				});
 			}
 		};
