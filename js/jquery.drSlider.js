@@ -61,11 +61,13 @@
 						links[i].href	 	= 'javascript:;';
 						links[i].title	 	= 'Navegação';
 						links[i].innerHTML 	= 'Navegação';
-						links[i].className 	= 'bt-nav ir';
+						links[i].className 	= 'bt-nav';
 
 						data.controls.push(links[i]);
 						container.appendChild(links[i]);
 					};
+
+					$(links).first().addClass('active');
 
 					$(links).bind('click.drslider',function(){
 						_private.movement.handlerButtonNav.call(this);
@@ -84,7 +86,7 @@
 						index 		= $(this).index(),
 						position 	= ((data.listItemsOpts.width*index)*-1);
 
-					$(this).addClass('current').siblings().removeClass('current');
+					$(this).addClass('active').siblings().removeClass('active');
 
 					_private.movement.animate.call($slider, position);
 				},
@@ -148,9 +150,11 @@
 					var data 		= $.data($(this)[0],'drSlider');
 
 					data.$slider.removeAttr('style');
-					data.$overflow.remove();
+					data.$list.unwrap();
 
 					$(data.controls).unbind('.drslider').remove();
+
+					$.removeData(this, 'drSlider');
 				});
 			}
 		};
@@ -164,15 +168,5 @@
 			$.error('Method ' +  method + ' does not exist on jQuery.drSlider');
 		}    
 	};
-
-})(jQuery);
-
-(function($){
-
-	$('#wrapper-slider').drSlider({
-		shownav 	: true,
-		visible 	: 1,
-		walk 		: 1
-	});
 
 })(jQuery);

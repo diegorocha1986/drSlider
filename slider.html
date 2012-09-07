@@ -18,7 +18,13 @@
 		#lista-imagens {margin: 0; padding: 0;}
 		#lista-imagens li {float: left;}
 		.container-nav {padding-top: 20px;}
-		.container-nav .bt-nav {width: 15px; height: 15px; background: #6FA8DC; float: left; margin-left: 20px; border: 1px solid #666; border-radius: 15px; }
+		.container-nav .bt-nav {width: 15px; height: 15px; background: #6FA8DC; float: left; margin-left: 20px; border: 1px solid #666; border-radius: 15px; text-indent: -999em; overflow: hidden;
+								-webkit-transition: all 0.2s ease-out;  /* Safari 3.2+, Chrome */
+						           -moz-transition: all 0.2s ease-out;  /* Firefox 4-15 */
+						             -o-transition: all 0.2s ease-out;  /* Opera 10.5–12.00 */
+						                transition: all 0.2s ease-out;  /* Firefox 16+, Opera 12.50+ */
+		}
+		.container-nav .bt-nav.active {background: #F00;}
 	</style>
 </head>
 <body>
@@ -33,14 +39,17 @@
 		</ul>
 	</div>
 
+	<button id="destroy-slider">Destroy</button>
+	<button id="build-slider">Build</button>
+
 	<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script> -->
 
 	<!-- scripts concatenated and minified via ant build script-->
 	<script src="js/libs/jquery-1.7.2.min.js"></script>
+	<script src="js/jquery.drSlider.js"></script>
 	<script src="js/plugins.js"></script>
 	<script src="js/script.js"></script>
-	<script src="js/jquery.drSlider.js"></script>
 	<!-- end scripts-->
 
 	<script>
