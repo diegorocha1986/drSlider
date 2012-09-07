@@ -94,7 +94,14 @@
 					console.log('Executei: animate;');
 					var data 		= $.data($(this)[0],'drSlider');
 
-					
+					data.$overflow.animate({
+						left		: step
+					},{
+						duration	: data.animation.duration,
+						easing 		: data.animation.easing,
+						step 		: data.animation.onAnimate,
+						complete 	: data.animation.onEnd
+					});
 				}
 			}
 		},
@@ -121,7 +128,13 @@
 							shownav 	: dataset.call($this, 'shownav', 'bool') 	=== true	 ? true : false,
 							visible 	: dataset.call($this, 'visible', 'int') 				|| 4,
 							walk 		: dataset.call($this, 'walk', 'int')	 				|| 3,
-							easing 		: dataset.call($this, 'easing', 'string')				|| 'easeOutExpo'
+							animation 	: {
+								easing 		: dataset.call($this, 'easing', 'string')				|| 'easeOutExpo',
+								duration 	: dataset.call($this, 'duration', 'int')				|| 700,
+								onStart 	: null,
+								onAnimate 	: null,
+								onEnd 		: null
+							}
 						};
 
 					options && $.extend(settings, options);

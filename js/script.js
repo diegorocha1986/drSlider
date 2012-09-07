@@ -18,7 +18,10 @@
 		$('#wrapper-slider').drSlider({
 			shownav 	: true,
 			visible 	: 1,
-			walk 		: 1
+			walk 		: 1,
+			animation 	: {
+				duration 	: 1500
+			}
 		});
 	}
 
