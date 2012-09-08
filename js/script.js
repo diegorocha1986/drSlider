@@ -20,6 +20,7 @@
 			visible 	: 1,
 			walk 		: 1,
 			animation 	: {
+				easing 		: 'easeOutBounce',
 				duration 	: 1500
 			}
 		});

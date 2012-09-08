@@ -60,7 +60,7 @@
 
 						links[i].href	 	= 'javascript:;';
 						links[i].title	 	= 'Navegação';
-						links[i].innerHTML 	= 'Navegação';
+						links[i].innerHTML 	= (i+1);
 						links[i].className 	= 'bt-nav';
 
 						data.controls.push(links[i]);
