@@ -6,8 +6,7 @@
 
 	$('#wrapper-slider').drSlider({
 		shownav 	: true,
-		visible 	: 1,
-		walk 		: 1
+		visible 	: 1
 	});
 
 	document.getElementById('destroy-slider').onclick = function(){
@@ -18,7 +17,6 @@
 		$('#wrapper-slider').drSlider({
 			shownav 	: true,
 			visible 	: 1,
-			walk 		: 1,
 			animation 	: {
 				easing 		: 'easeOutBounce',
 				duration 	: 1500

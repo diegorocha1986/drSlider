@@ -63,12 +63,13 @@
 						links[i].innerHTML 	= (i+1);
 						links[i].className 	= 'bt-nav';
 
-						data.controls.push(links[i]);
 						container.appendChild(links[i]);
 					};
 
 					$(links).first().addClass('active');
 
+					data.controls.nav = links;
+					
 					$(links).bind('click.drslider',function(){
 						_private.movement.handlerButtonNav.call(this);
 					});
@@ -127,7 +128,6 @@
 							loop 		: dataset.call($this, 'loop', 'bool') 		=== true	 ? true : false,
 							shownav 	: dataset.call($this, 'shownav', 'bool') 	=== true	 ? true : false,
 							visible 	: dataset.call($this, 'visible', 'int') 				|| 4,
-							walk 		: dataset.call($this, 'walk', 'int')	 				|| 3,
 							animation 	: {
 								easing 		: dataset.call($this, 'easing', 'string')				|| 'easeOutExpo',
 								duration 	: dataset.call($this, 'duration', 'int')				|| 700,
@@ -143,7 +143,7 @@
 						settings.$slider		= $(this),
 						settings.$list			= settings.$slider.find('ul'),
 						settings.$children		= settings.$list.children(),
-						settings.controls 		= [],
+						settings.controls 		= {},
 						settings.listItemsOpts 	= {
 							length 	: settings.$children.length,
 							width 	: settings.$children.outerWidth(),
@@ -154,7 +154,17 @@
 					}
 					
 					_private.create.wrapList.call(this);
-					settings.shownav && _private.create.createNavLinks.call(this);
+
+					if(settings.shownav){
+						if(typeof settings.shownav === 'boolean' && settings.shownav === true){
+							_private.create.createNavLinks.call(this);
+							_private.create.createArrowControls.call(this);
+						}
+						(settings.shownav === 'arrows') && _private.create.createArrowControls.call(this);
+						(settings.shownav === 'nav')    && _private.create.createNavLinks.call(this);
+					}
+
+					console.log($.data($this[0], 'drSlider'));
 				});
 			},
 			destroy 	: function(){
