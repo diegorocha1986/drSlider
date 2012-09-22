@@ -25,7 +25,7 @@
 
 	var _private 	= {
 			create 		: {
-				wrapList 			: function(){
+				wrapList 				: function(){
 					console.log('Executei: wrapList;');
 					var data 		= $.data($(this)[0], 'drSlider');
 
@@ -35,8 +35,8 @@
 						position 	: 'relative'
 					});
 
-					data.$list.wrap('<div id="drslider-overflow" />');
-					data.$overflow = $('#drslider-overflow');
+					data.$list.wrap('<div class="drslider-overflow" />');
+					data.$overflow = data.$list.parent();
 					
 					data.$overflow.css({
 						width 		: (data.listItemsOpts.width * data.listItemsOpts.length),
@@ -45,7 +45,7 @@
 
 					$.data($(this)[0], 'drSlider', data);
 				},
-				createNavLinks 		: function(){
+				createNavLinks 			: function(){
 					console.log('Executei: createNavLinks;');
 					var data 		= $.data($(this)[0],'drSlider'),
 						container 	= document.createElement('p'),
@@ -53,7 +53,7 @@
 						links 		= [],
 						i;
 
-					container.className 	= 'container-nav';
+					container.className 	= 'drslider-container-nav';
 
 					for(i = 0; i < amount; i++){
 						links[i] = document.createElement('a');
@@ -61,7 +61,7 @@
 						links[i].href	 	= 'javascript:;';
 						links[i].title	 	= 'Navegação';
 						links[i].innerHTML 	= (i+1);
-						links[i].className 	= 'bt-nav';
+						links[i].className 	= 'drslider-bt-nav';
 
 						container.appendChild(links[i]);
 					};
@@ -77,10 +77,40 @@
 					$.data($(this)[0], 'drSlider', data);
 
 					data.$list.parent().after(container);
+				},
+				createArrowControls 	: function(){
+					console.log('Executei: createArrowControls;');
+					var data 		= $.data($(this)[0],'drSlider'),
+						next		= document.createElement('button'),
+						previous	= document.createElement('button'),
+						controls 	= {};
+
+					next.className = 'drslider-next';
+					next.innerHTML = '>';
+					$(next).bind('click.drslider',function(){
+						_private.movement.next.call(this);
+					});
+
+					previous.className = 'drslider-previous';
+					previous.innerHTML = '<';
+					$(previous).bind('click.drslider',function(){
+						_private.movement.previous.call(this);
+					});
+
+					controls = {
+						next 		: next,
+						previous 	: previous
+					};
+
+					data.controls.arrows = controls;
+
+					data.$overflow.before(controls.previous).after(controls.next);
+
+					$.data($(this)[0], 'drSlider', data);
 				}
 			},
 			movement 	:{
-				handlerButtonNav 	: function(){
+				handlerButtonNav 		: function(){
 					console.log('Executei: handlerButtonNav;');
 					var $slider 	= $(this).parent().parent(),
 						data 		= $.data($slider[0],'drSlider'),
@@ -91,7 +121,7 @@
 
 					_private.movement.animate.call($slider, position);
 				},
-				animate 			: function(step){
+				animate 				: function(step){
 					console.log('Executei: animate;');
 					var data 		= $.data($(this)[0],'drSlider');
 
