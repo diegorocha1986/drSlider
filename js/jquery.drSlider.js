@@ -119,7 +119,25 @@
 
 					$(this).addClass('active').siblings().removeClass('active');
 
+					data.current = (index*visible);
+
+					$.data(data.$slider[0], 'drSlider', data);
+
 					_private.movement.animate.call($slider, position);
+				},
+				previous 				: function(){
+					console.log('Executei: previous;');
+					var $slider 	= $(this).parent(),
+						data 		= $.data($slider[0],'drSlider');
+
+					
+				},
+				next 					: function(){
+					console.log('Executei: next;');
+					var $slider 	= $(this).parent(),
+						data 		= $.data($slider[0],'drSlider');
+
+					
 				},
 				animate 				: function(step){
 					console.log('Executei: animate;');
@@ -173,6 +191,7 @@
 						settings.$slider		= $(this),
 						settings.$list			= settings.$slider.find('ul'),
 						settings.$children		= settings.$list.children(),
+						settings.current 		= 0,
 						settings.controls 		= {},
 						settings.listItemsOpts 	= {
 							length 	: settings.$children.length,
