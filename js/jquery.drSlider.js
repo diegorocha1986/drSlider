@@ -115,15 +115,16 @@
 					var $slider 	= $(this).parent().parent(),
 						data 		= $.data($slider[0],'drSlider'),
 						index 		= $(this).index(),
-						position 	= ((data.listItemsOpts.width*index)*-1);
+						indexLi		= (index * data.visible),
+						position 	= ((data.$children.eq(indexLi).position().left) * -1);
 
 					$(this).addClass('active').siblings().removeClass('active');
 
-					data.current = (index*visible);
+					data.current = index;
 
 					$.data(data.$slider[0], 'drSlider', data);
 
-					_private.movement.animate.call($slider, position);
+					_private.movement.animate.call(data.$slider, position);
 				},
 				previous 				: function(){
 					console.log('Executei: previous;');
@@ -137,7 +138,7 @@
 					var $slider 	= $(this).parent(),
 						data 		= $.data($slider[0],'drSlider');
 
-					
+					console.log(data.current);	
 				},
 				animate 				: function(step){
 					console.log('Executei: animate;');
