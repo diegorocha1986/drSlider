@@ -27,7 +27,7 @@
 			create 		: {
 				wrapList 				: function(){
 					console.log('Executei: wrapList;');
-					var data 		= $.data($(this)[0], 'drSlider');
+					var data 		= this;
 
 					data.$slider.css({
 						width 		: data.listItemsOpts.width,
@@ -42,12 +42,10 @@
 						width 		: (data.listItemsOpts.width * data.listItemsOpts.length),
 						position 	: 'relative'
 					});
-
-					$.data($(this)[0], 'drSlider', data);
 				},
 				createNavLinks 			: function(){
 					console.log('Executei: createNavLinks;');
-					var data 		= $.data($(this)[0],'drSlider'),
+					var data 		= this,
 						container 	= document.createElement('p'),
 						amount 		= Math.ceil(data.listItemsOpts.length/data.visible),
 						links 		= [],
@@ -71,16 +69,14 @@
 					data.controls.nav = links;
 					
 					$(links).bind('click.drslider',function(){
-						_private.movement.handlerButtonNav.call(this);
+						_private.movement.handlerButtonNav.call(data, this);
 					});
-
-					$.data($(this)[0], 'drSlider', data);
 
 					data.$list.parent().after(container);
 				},
 				createArrowControls 	: function(){
 					console.log('Executei: createArrowControls;');
-					var data 		= $.data($(this)[0],'drSlider'),
+					var data 		= this,
 						next		= document.createElement('button'),
 						previous	= document.createElement('button'),
 						controls 	= {};
@@ -88,13 +84,13 @@
 					next.className = 'drslider-next';
 					next.innerHTML = '>';
 					$(next).bind('click.drslider',function(){
-						_private.movement.next.call(this);
+						_private.movement.next.call(data);
 					});
 
 					previous.className = 'drslider-previous';
 					previous.innerHTML = '<';
 					$(previous).bind('click.drslider',function(){
-						_private.movement.previous.call(this);
+						_private.movement.previous.call(data);
 					});
 
 					controls = {
@@ -105,52 +101,51 @@
 					data.controls.arrows = controls;
 
 					data.$overflow.before(controls.previous).after(controls.next);
-
-					$.data($(this)[0], 'drSlider', data);
 				}
 			},
 			movement 	:{
-				handlerButtonNav 		: function(){
+				handlerButtonNav 		: function(elm){
 					console.log('Executei: handlerButtonNav;');
-					var $slider 	= $(this).parent().parent(),
-						data 		= $.data($slider[0],'drSlider'),
-						index 		= $(this).index(),
+					var data 		= this,
+						index 		= $(elm).index(),
 						indexLi		= (index * data.visible),
 						position 	= ((data.$children.eq(indexLi).position().left) * -1);
 
-					$(this).addClass('active').siblings().removeClass('active');
+					$(elm).addClass('active').siblings().removeClass('active');
 
 					data.current = index;
 
-					$.data(data.$slider[0], 'drSlider', data);
-
-					_private.movement.animate.call(data.$slider, position);
+					_private.movement.animate.call(data, position);
 				},
 				previous 				: function(){
 					console.log('Executei: previous;');
-					var $slider 	= $(this).parent(),
-						data 		= $.data($slider[0],'drSlider');
+					var data = this;
 
 					
 				},
 				next 					: function(){
 					console.log('Executei: next;');
-					var $slider 	= $(this).parent(),
-						data 		= $.data($slider[0],'drSlider');
+					var data = this;
 
 					console.log(data.current);	
 				},
 				animate 				: function(step){
 					console.log('Executei: animate;');
-					var data 		= $.data($(this)[0],'drSlider');
+					var data = this;
 
-					data.$overflow.animate({
+					data.animating = true;
+
+					data.$overflow.not(':animated').animate({
 						left		: step
 					},{
 						duration	: data.animation.duration,
 						easing 		: data.animation.easing,
 						step 		: data.animation.onAnimate,
-						complete 	: data.animation.onEnd
+						complete 	: function(){
+							data.animating = false;
+
+							(typeof data.animation.onEnd === 'function') && data.animation.onEnd.call(data.$slider[0]);
+						}
 					});
 				}
 			}
@@ -177,6 +172,7 @@
 							loop 		: dataset.call($this, 'loop', 'bool') 		=== true	 ? true : false,
 							shownav 	: dataset.call($this, 'shownav', 'bool') 	=== true	 ? true : false,
 							visible 	: dataset.call($this, 'visible', 'int') 				|| 4,
+							animating 	: false,
 							animation 	: {
 								easing 		: dataset.call($this, 'easing', 'string')				|| 'easeOutExpo',
 								duration 	: dataset.call($this, 'duration', 'int')				|| 700,
@@ -203,18 +199,16 @@
 						$.data($this[0], 'drSlider', settings);
 					}
 					
-					_private.create.wrapList.call(this);
+					_private.create.wrapList.call(settings);
 
 					if(settings.shownav){
 						if(typeof settings.shownav === 'boolean' && settings.shownav === true){
-							_private.create.createNavLinks.call(this);
-							_private.create.createArrowControls.call(this);
+							_private.create.createNavLinks.call(settings);
+							_private.create.createArrowControls.call(settings);
 						}
-						(settings.shownav === 'arrows') && _private.create.createArrowControls.call(this);
-						(settings.shownav === 'nav')    && _private.create.createNavLinks.call(this);
+						(settings.shownav === 'arrows') && _private.create.createArrowControls.call(settings);
+						(settings.shownav === 'nav')    && _private.create.createNavLinks.call(settings);
 					}
-
-					console.log($.data($this[0], 'drSlider'));
 				});
 			},
 			destroy 	: function(){
