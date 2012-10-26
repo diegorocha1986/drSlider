@@ -26,7 +26,7 @@
 	var _private 	= {
 			create 		: {
 				wrapList 				: function(){
-					console.log('Executei: wrapList;');
+					console.log('Executei: create/wrapList;');
 					var data 		= this;
 
 					data.$slider.css({
@@ -44,7 +44,7 @@
 					});
 				},
 				createNavLinks 			: function(){
-					console.log('Executei: createNavLinks;');
+					console.log('Executei: create/createNavLinks;');
 					var data 		= this,
 						container 	= document.createElement('p'),
 						amount 		= Math.ceil(data.listItemsOpts.length/data.visible),
@@ -75,7 +75,7 @@
 					data.$list.parent().after(container);
 				},
 				createArrowControls 	: function(){
-					console.log('Executei: createArrowControls;');
+					console.log('Executei: create/createArrowControls;');
 					var data 		= this,
 						next		= document.createElement('button'),
 						previous	= document.createElement('button'),
@@ -103,9 +103,9 @@
 					data.$overflow.before(controls.previous).after(controls.next);
 				}
 			},
-			movement 	:{
+			movement 	: {
 				handlerButtonNav 		: function(elm){
-					console.log('Executei: handlerButtonNav;');
+					console.log('Executei: movement/handlerButtonNav;');
 					var data 		= this,
 						index 		= $(elm).index(),
 						indexLi		= (index * data.visible),
@@ -118,19 +118,19 @@
 					_private.movement.animate.call(data, position);
 				},
 				previous 				: function(){
-					console.log('Executei: previous;');
+					console.log('Executei: movement/previous;');
 					var data = this;
 
 					
 				},
 				next 					: function(){
-					console.log('Executei: next;');
+					console.log('Executei: movement/next;');
 					var data = this;
 
 					console.log(data.current);	
 				},
 				animate 				: function(step){
-					console.log('Executei: animate;');
+					console.log('Executei: movement/animate;');
 					var data = this;
 
 					data.animating = true;
@@ -148,12 +148,30 @@
 						}
 					});
 				}
+			},
+			interval 	: {
+				create 					: function(){
+					console.log('Executei: interval/create;');
+					var data = this;
+
+					(!data.interval || data.interval === 0) && return;
+
+					return window.setInterval(function(){
+						methods.next.call(data);
+					}, data.interval);
+				},
+				clear 					: function(){
+					console.log('Executei: interval/clear;');
+					var data = this;
+
+					
+				}
 			}
 		},
 
 		methods 	= {
 			init 		: function(options){
-				console.log('Executei: init;');
+				console.log('Executei: methods/init;');
 				return this.each(function(){
 					var $this 	= $(this),
 						data 	= $.data($this[0], 'drSlider'),
@@ -172,6 +190,7 @@
 							loop 		: dataset.call($this, 'loop', 'bool') 		=== true	 ? true : false,
 							shownav 	: dataset.call($this, 'shownav', 'bool') 	=== true	 ? true : false,
 							visible 	: dataset.call($this, 'visible', 'int') 				|| 4,
+							interval 	: 3000,
 							animating 	: false,
 							animation 	: {
 								easing 		: dataset.call($this, 'easing', 'string')				|| 'easeOutExpo',
@@ -212,7 +231,7 @@
 				});
 			},
 			destroy 	: function(){
-				console.log('Executei: destroy;');
+				console.log('Executei: methods/destroy;');
 				return this.each(function(){
 					var data 		= $.data($(this)[0],'drSlider');
 
