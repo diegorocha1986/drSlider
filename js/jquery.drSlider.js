@@ -154,7 +154,8 @@
 					console.log('Executei: interval/create;');
 					var data = this;
 
-					(!data.interval || data.interval === 0) && return;
+					if(!data.interval || data.interval === 0)
+						return;
 
 					return window.setInterval(function(){
 						methods.next.call(data);
